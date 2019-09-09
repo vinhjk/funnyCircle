@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Funny Circle</title>
+</head>
+<body>
+<canvas id="myCanvas" width="1368px" height="768px" style="border:1px solid #d3d3d3;"></canvas>
+<script>
+    function Circle(x, y, radius){
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+    }
+
+    function getRandomHex(){
+        return Math.floor(Math.random()*255);
+    }
+
+    function getRandomColor(){
+        var red = getRandomHex();
+        var green = getRandomHex();
+        var blue = getRandomHex();
+        return "rgb(" + red + "," + blue + "," + green +")";
+    }
+
+    function createCircle(){
+        var ctx = document.getElementById("myCanvas").getContext("2d");
+        var radius = Math.floor(Math.random() * 80);
+        var color = getRandomColor();
+        var x = Math.random() * window.innerWidth;
+        var y = Math.random() * window.innerHeight;
+        var circle= new Circle(x, y, radius);
+        ctx.beginPath();
+        ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+    }
+
+    function createMultipleCircle(){
+        for(var i = 0; i < 30; i++) {
+            createCircle();
+        }
+    }
+
+    createMultipleCircle();
+    function Hero(circle, top , left, size) {
+        this.circle = circle;
+        this.top = top;
+        this.left = left;
+        this.size = size;
+        this.getHeroElement = function(){
+            return '<img width="'+ this.size + '"' +
+                ' height="'+ this.size + '"' +
+                ' src="' + this.circle +'"' +
+                ' style="top: '+this.top+'px; left:'+this.left+'px;position:absolute;" />';
+        };
+
+        this.moveRight = function(){
+            this.left += 70;
+            console.log('ok: ' + this.left);
+        }
+        this.moveTop = function () {
+            this.top +=70;
+            console.log('ok:' +this.top);
+        }
+    }
+    var hero = new Hero(Circle, 20, 30, 200);
+
+    function start(){
+        if(hero.left < window.innerWidth - hero.size){
+            hero.moveRight();
+        }
+        if(hero.top < window.innerWidth - hero.size){
+            hero.moveTop();
+        }
+        document.getElementById('myCanvas').innerHTML = hero.getHeroElement();
+        setTimeout(start, 500)
+    }
+    start();
+</script>
+</body>
+</html>
